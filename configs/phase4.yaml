@@ -1,0 +1,24 @@
+seed: 42
+
+retrieval:
+  checkpoint: models/two_tower_content_temporal_purchase.pt
+  k: 500
+  batch_size: 512
+
+gbdt_model: models/gbdt_ranker.txt
+
+ope:
+  max_eval_users: 10000
+  temperature: 1.0
+  clip: 20.0
+  n_bootstrap: 1000
+
+interleave:
+  k: 10
+
+mde:
+  alpha: 0.05
+  power: 0.8
+  # Hypothetical storefront DAU seeing a recs module. Not this dump. Not Steam traffic.
+  daily_active_users: [10000, 100000, 1000000]
+  relative_lifts: [0.01, 0.02, 0.05, 0.10]

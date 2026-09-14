@@ -1,0 +1,5 @@
+{
+  "prediction": "Naive thresholding of play time (hours > 2.0) will over-recommend long games relative to binary purchase and relative to within-game percentile labels.",
+  "operationalization": "For each model, take top-10 retrieved items per test user (temporal split, full catalog, train items masked). Map each item to its median train-set hours (a proxy for game length). Average those per-user medians. Predicted order of this statistic: thresholded > purchase > percentile.",
+  "written_at": "2026-09-13T before any two-tower training run"
+}

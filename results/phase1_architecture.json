@@ -1,0 +1,16 @@
+{
+  "phase": 1,
+  "frozen": true,
+  "run_id": "20260914T072255Z",
+  "frozen_at": "2026-09-14T07:35:08Z",
+  "label": "purchase",
+  "user_tower": "user_id embedding, L2-normalized; unknown users use mean user vector",
+  "item_tower": "item_id embedding (unk/pad for items with no train interactions) + mean genre embedding + mean tag embedding + Linear(log1p price, price-missing, scaled year, year-missing), fused by Linear-ReLU-Linear, L2-normalized",
+  "id_dropout": 0.2,
+  "in_batch_negatives": true,
+  "logq_correction": true,
+  "embedding_dim": 64,
+  "ann": "faiss.IndexHNSWFlat METRIC_INNER_PRODUCT",
+  "eval": "exact inner product over the full metadata catalog; no sampled negatives",
+  "do_not_change": "Changing this architecture after Phase 1 invalidates ranking and experimentation comparisons."
+}

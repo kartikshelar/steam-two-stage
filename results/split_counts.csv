@@ -1,0 +1,3 @@
+split,n_train,n_test,n_users_train,n_users_test,n_items_train,n_items_test,train_timestamp_min,train_timestamp_max,test_timestamp_min,test_timestamp_max,temporal_ordered
+temporal,2686568,323744,221870,98589,10027,8573,2010-10-15 00:00:00+00:00,2017-06-26 00:00:00+00:00,2017-06-27 00:00:00+00:00,2018-01-05 00:00:00+00:00,True
+random,2554102,573461,216491,167001,11287,10676,2010-10-15 00:00:00+00:00,2018-01-05 00:00:00+00:00,2010-10-15 00:00:00+00:00,2018-01-05 00:00:00+00:00,False

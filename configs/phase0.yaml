@@ -1,0 +1,38 @@
+seed: 42
+
+data:
+  max_reviews: null
+  urls:
+    reviews:
+      - https://huggingface.co/datasets/recommender-system/steam-review-and-bundle-dataset/resolve/main/steam_reviews.json.gz
+      - https://mcauleylab.ucsd.edu/public_datasets/data/steam/steam_reviews.json.gz
+    games:
+      - https://huggingface.co/datasets/recommender-system/steam-review-and-bundle-dataset/resolve/main/steam_games.json.gz
+      - https://mcauleylab.ucsd.edu/public_datasets/data/steam/steam_games.json.gz
+    bundles:
+      - https://huggingface.co/datasets/recommender-system/steam-review-and-bundle-dataset/resolve/main/bundle_data.json.gz
+      - https://mcauleylab.ucsd.edu/public_datasets/data/steam/bundle_data.json.gz
+
+splits:
+  temporal_quantile: 0.8
+  random_test_frac: 0.2
+  min_train_interactions: 5
+
+labels:
+  hours_threshold: 2.0
+  game_percentile: 50
+
+retrieval:
+  embedding_dim: 64
+  batch_size: 1024
+  epochs: 5
+  lr: 0.002
+  temperature: 0.07
+  logq_correction: true
+  weight_decay: 0.0
+  num_workers: 0
+
+eval:
+  ks: [10, 50, 100]
+  max_eval_users: 20000
+  qualitative_users: 2000

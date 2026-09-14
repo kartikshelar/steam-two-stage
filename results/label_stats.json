@@ -1,0 +1,140 @@
+{
+  "summary": {
+    "created_at": "2026-09-14T00:15:54Z",
+    "hours_threshold": 2.0,
+    "game_percentile": 50.0,
+    "cutoff_source": "train split only",
+    "temporal": {
+      "n_items_with_cutoff": 10009,
+      "cutoff_p50": 3.5,
+      "cutoff_p90": 15.6
+    },
+    "random": {
+      "n_items_with_cutoff": 11263,
+      "cutoff_p50": 3.4,
+      "cutoff_p90": 15.55
+    }
+  },
+  "rows": [
+    {
+      "split": "temporal",
+      "part": "train",
+      "label": "purchase",
+      "n": 2686568,
+      "n_positive": 2686568,
+      "positive_rate": 1.0,
+      "n_users_positive": 221870,
+      "n_items_positive": 10027
+    },
+    {
+      "split": "temporal",
+      "part": "train",
+      "label": "threshold",
+      "n": 2686568,
+      "n_positive": 2138609,
+      "positive_rate": 0.7960375467883187,
+      "n_users_positive": 221624,
+      "n_items_positive": 9827
+    },
+    {
+      "split": "temporal",
+      "part": "train",
+      "label": "percentile",
+      "n": 2686568,
+      "n_positive": 1352831,
+      "positive_rate": 0.5035536044499898,
+      "n_users_positive": 215907,
+      "n_items_positive": 10009
+    },
+    {
+      "split": "temporal",
+      "part": "test",
+      "label": "purchase",
+      "n": 323744,
+      "n_positive": 323744,
+      "positive_rate": 1.0,
+      "n_users_positive": 98589,
+      "n_items_positive": 8573
+    },
+    {
+      "split": "temporal",
+      "part": "test",
+      "label": "threshold",
+      "n": 323744,
+      "n_positive": 262238,
+      "positive_rate": 0.8100165562913907,
+      "n_users_positive": 90648,
+      "n_items_positive": 7470
+    },
+    {
+      "split": "temporal",
+      "part": "test",
+      "label": "percentile",
+      "n": 323744,
+      "n_positive": 147381,
+      "positive_rate": 0.4552393248986854,
+      "n_users_positive": 65782,
+      "n_items_positive": 7419
+    },
+    {
+      "split": "random",
+      "part": "train",
+      "label": "purchase",
+      "n": 2554102,
+      "n_positive": 2554102,
+      "positive_rate": 1.0,
+      "n_users_positive": 216491,
+      "n_items_positive": 11287
+    },
+    {
+      "split": "random",
+      "part": "train",
+      "label": "threshold",
+      "n": 2554102,
+      "n_positive": 2034720,
+      "positive_rate": 0.7966479020806531,
+      "n_users_positive": 216236,
+      "n_items_positive": 10998
+    },
+    {
+      "split": "random",
+      "part": "train",
+      "label": "percentile",
+      "n": 2554102,
+      "n_positive": 1287176,
+      "positive_rate": 0.5039642112961816,
+      "n_users_positive": 210549,
+      "n_items_positive": 11263
+    },
+    {
+      "split": "random",
+      "part": "test",
+      "label": "purchase",
+      "n": 573461,
+      "n_positive": 573461,
+      "positive_rate": 1.0,
+      "n_users_positive": 167001,
+      "n_items_positive": 10676
+    },
+    {
+      "split": "random",
+      "part": "test",
+      "label": "threshold",
+      "n": 573461,
+      "n_positive": 454992,
+      "positive_rate": 0.7934140246677629,
+      "n_users_positive": 154816,
+      "n_items_positive": 9525
+    },
+    {
+      "split": "random",
+      "part": "test",
+      "label": "percentile",
+      "n": 573461,
+      "n_positive": 285767,
+      "positive_rate": 0.49831985087041664,
+      "n_users_positive": 123655,
+      "n_items_positive": 9699
+    }
+  ]
+}

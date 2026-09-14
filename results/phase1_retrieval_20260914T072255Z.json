@@ -1,0 +1,9 @@
+{
+  "run_id": "20260914T072255Z",
+  "splits": [
+    "temporal",
+    "random"
+  ],
+  "n_metric_rows": 256,
+  "csv": "C:\\Users\\Kartik Shelar\\Desktop\\USC\\steam-recsys\\results\\phase1_retrieval_20260914T072255Z.csv"
+}

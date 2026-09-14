@@ -1,0 +1,28 @@
+{
+  "created_at": "2026-09-14T00:16:49Z",
+  "split": "temporal",
+  "device": "cuda",
+  "labels": {
+    "purchase": {
+      "n_positives": 2686568,
+      "n_users_positive": 221870,
+      "n_items_positive": 10027,
+      "n_batches_per_epoch": 2623,
+      "checkpoint": "C:\\Users\\Kartik Shelar\\Desktop\\USC\\steam-recsys\\models\\two_tower_temporal_purchase.pt"
+    },
+    "threshold": {
+      "n_positives": 2138609,
+      "n_users_positive": 221624,
+      "n_items_positive": 9827,
+      "n_batches_per_epoch": 2088,
+      "checkpoint": "C:\\Users\\Kartik Shelar\\Desktop\\USC\\steam-recsys\\models\\two_tower_temporal_threshold.pt"
+    },
+    "percentile": {
+      "n_positives": 1352831,
+      "n_users_positive": 215907,
+      "n_items_positive": 10009,
+      "n_batches_per_epoch": 1321,
+      "checkpoint": "C:\\Users\\Kartik Shelar\\Desktop\\USC\\steam-recsys\\models\\two_tower_temporal_percentile.pt"
+    }
+  }
+}

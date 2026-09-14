@@ -1,0 +1,12 @@
+run_id,phase,split,label,model,metric,k,value,n_users,slice
+20260914T082225Z,2,temporal,purchase,gbdt_pit,pit_auc,0,0.9722339041562499,27210,leak_experiment_sampled_candidates
+20260914T082225Z,2,temporal,purchase,gbdt_pit,pit_average_precision,0,0.7927055428762847,27210,leak_experiment_sampled_candidates
+20260914T082225Z,2,temporal,purchase,gbdt_pit,pit_ndcg_10,10,0.9215374332164886,27210,leak_experiment_sampled_candidates
+20260914T082225Z,2,temporal,purchase,gbdt_pit,pit_ndcg_50,50,0.9239717368308399,27210,leak_experiment_sampled_candidates
+20260914T082225Z,2,temporal,purchase,gbdt_leaked,leaked_auc,0,0.9999472800000001,27210,leak_experiment_sampled_candidates
+20260914T082225Z,2,temporal,purchase,gbdt_leaked,leaked_average_precision,0,0.999282508624076,27210,leak_experiment_sampled_candidates
+20260914T082225Z,2,temporal,purchase,gbdt_leaked,leaked_ndcg_10,10,0.9997290828865841,27210,leak_experiment_sampled_candidates
+20260914T082225Z,2,temporal,purchase,gbdt_leaked,leaked_ndcg_50,50,0.999758289397059,27210,leak_experiment_sampled_candidates
+20260914T082225Z,2,temporal,purchase,gbdt_leaked,auc_gap_leaked_minus_pit,0,0.02771337584375022,27210,leak_experiment_sampled_candidates
+20260914T082225Z,2,temporal,purchase,gbdt_leaked,ap_gap_leaked_minus_pit,0,0.20657696574779127,27210,leak_experiment_sampled_candidates
+20260914T082225Z,2,temporal,purchase,gbdt_leaked,ndcg_10_gap_leaked_minus_pit,10,0.07819164967009551,27210,leak_experiment_sampled_candidates

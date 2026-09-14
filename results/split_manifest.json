@@ -1,0 +1,90 @@
+{
+  "created_at": "2026-09-14T00:13:24Z",
+  "frozen": true,
+  "seed": 42,
+  "temporal_quantile": 0.8,
+  "temporal_cutoff": "2017-06-27 00:00:00+00:00",
+  "random_test_frac": 0.2,
+  "kcore": {
+    "min_train_interactions": 5,
+    "n_train_before": 5504348,
+    "n_test_before": 1385380,
+    "n_train_after": 2686568,
+    "n_users_train": 221870,
+    "n_items_train": 10027,
+    "n_test_warm": 323744,
+    "n_test_cold": 1061636,
+    "n_cold_users_in_test": 695972,
+    "n_cold_items_in_test": 4530
+  },
+  "temporal": {
+    "n_train": 2686568,
+    "n_test": 323744,
+    "n_users_train": 221870,
+    "n_users_test": 98589,
+    "n_items_train": 10027,
+    "n_items_test": 8573,
+    "train_timestamp_min": "2010-10-15 00:00:00+00:00",
+    "train_timestamp_max": "2017-06-26 00:00:00+00:00",
+    "test_timestamp_min": "2017-06-27 00:00:00+00:00",
+    "test_timestamp_max": "2018-01-05 00:00:00+00:00",
+    "temporal_ordered": true
+  },
+  "temporal_raw_before_kcore": {
+    "n_train": 5504348,
+    "n_test": 1385380,
+    "n_users_train": 2140572,
+    "n_users_test": 809248,
+    "n_items_train": 12260,
+    "n_items_test": 13780,
+    "train_timestamp_min": "2010-10-15 00:00:00+00:00",
+    "train_timestamp_max": "2017-06-26 00:00:00+00:00",
+    "test_timestamp_min": "2017-06-27 00:00:00+00:00",
+    "test_timestamp_max": "2018-01-05 00:00:00+00:00",
+    "temporal_ordered": true
+  },
+  "random": {
+    "n_train": 2554102,
+    "n_test": 573461,
+    "n_users_train": 216491,
+    "n_users_test": 167001,
+    "n_items_train": 11287,
+    "n_items_test": 10676,
+    "train_timestamp_min": "2010-10-15 00:00:00+00:00",
+    "train_timestamp_max": "2018-01-05 00:00:00+00:00",
+    "test_timestamp_min": "2010-10-15 00:00:00+00:00",
+    "test_timestamp_max": "2018-01-05 00:00:00+00:00",
+    "temporal_ordered": false
+  },
+  "random_raw_before_kcore": {
+    "n_train": 5511713,
+    "n_test": 1378015,
+    "n_users_train": 2235030,
+    "n_users_test": 851634,
+    "n_items_train": 15304,
+    "n_items_test": 13424,
+    "train_timestamp_min": "2010-10-15 00:00:00+00:00",
+    "train_timestamp_max": "2018-01-05 00:00:00+00:00",
+    "test_timestamp_min": "2010-10-15 00:00:00+00:00",
+    "test_timestamp_max": "2018-01-05 00:00:00+00:00",
+    "temporal_ordered": false
+  },
+  "random_core": {
+    "min_train_interactions": 5,
+    "n_train_before": 5511713,
+    "n_test_before": 1378015,
+    "n_train_after": 2554102,
+    "n_users_train": 216491,
+    "n_items_train": 11287,
+    "n_test_warm": 573461,
+    "n_test_cold": 804554,
+    "n_cold_users_in_test": 684519,
+    "n_cold_items_in_test": 2389
+  },
+  "n_reviews_input": 6889728,
+  "notes": [
+    "Temporal split is the headline. Random split is a labeled inflation comparison only.",
+    "k-core is computed on TRAIN interactions only, then applied to test (no test-count leakage).",
+    "test_*_cold.parquet holds rows whose user or item missed the train k-core."
+  ]
+}

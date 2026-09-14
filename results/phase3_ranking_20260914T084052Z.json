@@ -1,0 +1,24 @@
+{
+  "run_id": "20260914T084052Z",
+  "phase": 3,
+  "split": "temporal",
+  "note": "End-to-end Recall@K / NDCG@K are full-catalog metrics: retrieve 500 with the frozen two-tower, rerank those 500 with PIT GBDT. most-popular is reported on the same users. This is not sampled-negative ranking.",
+  "checkpoint": "C:\\Users\\Kartik Shelar\\Desktop\\USC\\steam-recsys\\models\\two_tower_content_temporal_purchase.pt",
+  "retrieve_k": 500,
+  "cutoff_unix": 1498521600,
+  "n_pit_item_checks": 25,
+  "n_train_pos_in_retrieve_k": 8367,
+  "n_train_pos_injected": 1633,
+  "train_hit_rate_at_k": 0.8367,
+  "recall_at_retrieve_k": {
+    "overall": 0.526679320228432,
+    "cold_user": 0.5380632910317062,
+    "cold_item": 0.2548329297966452
+  },
+  "top_feature": "item_n",
+  "zero_gain_features": [],
+  "n_train_queries_emitted": 10000,
+  "n_train_rows": 510000,
+  "n_train_positives": 10000,
+  "n_train_queries_sampled": 10000
+}

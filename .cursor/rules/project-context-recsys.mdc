@@ -1,0 +1,38 @@
+---
+description: Core context and hard rules for steam-recsys
+alwaysApply: true
+---
+
+Read @PROJECT_BRIEF.md before doing any work in this repo. It is the source of
+truth for scope, architecture, evaluation protocol, and phase gates.
+
+Hard rules that override any instruction to the contrary:
+
+1. Every number that leaves this project must be traceable to a logged run in
+   results/. Never invent, estimate, or extrapolate a metric. If a run has not
+   happened, say so.
+2. Temporal split is always the headline number. Random split appears only as a
+   clearly labeled comparison showing inflation. Never lead with random split.
+3. The most-popular baseline is reported alongside every retrieval result, even
+   when it is embarrassing. Never omit it.
+4. Evaluate against the full catalog. Never use sampled negatives (e.g. 100
+   random items) for evaluation — it inflates every metric.
+5. No feature may use data from after the interaction timestamp it predicts.
+   features/test_no_leakage.py must pass before any model result is recorded.
+6. Do not expand scope. Out of scope: sequence models (SASRec, BERT4Rec),
+   real-time streaming features, multi-task ranking heads, any UI, a
+   general-purpose feature store, LLM/text-embedding features. If a change would
+   add one of these, stop and flag it instead of implementing it.
+7. AWS first, Azure port last (Phase 6 only). Budgets alarm before any
+   Terraform. Public subnet only, no NAT Gateway. Always leave the stack
+   destroyable in one `terraform destroy`. Expected total spend under $10.
+8. Fix the retrieval architecture at the end of Phase 1 and do not change it.
+   Changing it invalidates every downstream comparison.
+9. Do not start a phase until the previous phase's definition of done in
+   PROJECT_BRIEF.md §12 is met. State which phase you are in before working.
+10. Negative results are first-class output. Features that don't help, metrics
+    that move the wrong way, and failed predictions all get written up in
+    docs/findings.md.
+11. This repo makes no claim of production traffic, real users, live feedback
+    loops, or an actual A/B test. Never write README language implying any of
+    these.

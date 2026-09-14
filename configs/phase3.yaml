@@ -1,0 +1,30 @@
+seed: 42
+
+labels:
+  hours_threshold: 2.0
+  game_percentile: 50
+
+retrieval:
+  checkpoint: models/two_tower_content_temporal_purchase.pt
+  k: 500
+  batch_size: 512
+
+ranking:
+  max_train_queries: 10000
+  # Negatives are drawn from the retrieved 500, not the catalog. Eval still reranks all 500.
+  n_neg_train: 50
+  max_eval_users: 20000
+  max_cold_users: 20000
+
+eval:
+  ks: [10, 50, 100]
+
+gbdt:
+  n_estimators: 200
+  learning_rate: 0.05
+  num_leaves: 63
+  subsample: 0.8
+  colsample_bytree: 0.8
+  min_child_samples: 50
+  random_state: 42
+  verbosity: -1

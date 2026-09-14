@@ -1,0 +1,11 @@
+{
+  "run_id": "20260914T002244Z",
+  "split": "temporal",
+  "pre_registration": {
+    "prediction": "Naive thresholding of play time (hours > 2.0) will over-recommend long games relative to binary purchase and relative to within-game percentile labels.",
+    "operationalization": "For each model, take top-10 retrieved items per test user (temporal split, full catalog, train items masked). Map each item to its median train-set hours (a proxy for game length). Average those per-user medians. Predicted order of this statistic: thresholded > purchase > percentile.",
+    "written_at": "2026-09-13T before any two-tower training run"
+  },
+  "n_metric_rows": 240,
+  "csv": "C:\\Users\\Kartik Shelar\\Desktop\\USC\\steam-recsys\\results\\label_experiment_temporal_20260914T002244Z.csv"
+}

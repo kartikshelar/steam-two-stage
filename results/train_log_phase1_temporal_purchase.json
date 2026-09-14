@@ -1,0 +1,35 @@
+{
+  "n_positives": 2686568,
+  "n_users_positive": 221870,
+  "n_items_positive": 10027,
+  "n_batches_per_epoch": 2623,
+  "use_content": true,
+  "id_dropout": 0.2,
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 6.97938964206028,
+      "n_batches": 2623
+    },
+    {
+      "epoch": 2,
+      "loss": 6.3904249290905515,
+      "n_batches": 2623
+    },
+    {
+      "epoch": 3,
+      "loss": 6.1402459806310645,
+      "n_batches": 2623
+    },
+    {
+      "epoch": 4,
+      "loss": 5.925143807433372,
+      "n_batches": 2623
+    },
+    {
+      "epoch": 5,
+      "loss": 5.757434787888405,
+      "n_batches": 2623
+    }
+  ]
+}
