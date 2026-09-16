@@ -1,0 +1,17 @@
+# Copy to terraform.tfvars (NEVER commit terraform.tfvars — it may contain your email/IP).
+# First apply: leave enables false. Only resource group + budget.
+
+location    = "eastus"
+alert_email = "YOUR_EMAIL@example.com"
+
+# Keep these false until docs/azure-port.md checklist is done.
+enable_network  = false
+enable_compute  = false
+instance_count  = 0
+
+# When you eventually enable compute for a short session:
+# compute_location = "westus2"  # only if eastus has no B-series capacity
+# vm_size          = "Standard_B2s"
+# allowed_cidr_api = "x.x.x.x/32"
+# ssh_public_key   = "ssh-rsa AAAA..."  # Azure Linux VMs reject ed25519
+# instance_count   = 1

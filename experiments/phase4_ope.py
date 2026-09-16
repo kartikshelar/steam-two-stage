@@ -25,7 +25,7 @@ from eval.metrics import recall_at_k, user_ground_truth, user_seen_items
 from experiments.interleaving import compare_rankings
 from experiments.ips import estimate_target_from_logs, ips_snips, simulate_bandit_logs
 from experiments.mde import mde_table
-from features.point_in_time import PITState, _item_meta
+from features.point_in_time import PITState, _item_meta, freeze_before
 from ranking.features import RANKING_COLS
 from ranking.rerank import rerank
 from ranking.train_gbdt import load_booster, predict_booster
@@ -41,18 +41,7 @@ def _cutoff_unix(manifest: dict[str, Any]) -> int:
 
 
 def freeze_pit(reviews: pd.DataFrame, games: pd.DataFrame, cutoff_unix: int) -> PITState:
-    meta_by_item = _item_meta(games)
-    state = PITState()
-    ordered = reviews.sort_values(["ts", "user_id", "item_id"])
-    for rec in tqdm(ordered.itertuples(index=False), total=len(ordered), desc="PIT freeze"):
-        t = int(rec.ts)
-        if t >= cutoff_unix:
-            break
-        item = str(rec.item_id)
-        hours = float(rec.hours) if rec.hours == rec.hours else float("nan")
-        meta_i = meta_by_item.get(item)
-        state.observe(str(rec.user_id), item, t, hours, (meta_i or {}).get("genres") or [])
-    return state
+    return freeze_before(reviews, games, cutoff_unix)
 
 
 def score_gbdt(

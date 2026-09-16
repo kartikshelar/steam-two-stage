@@ -1,0 +1,16 @@
+{
+  "hardware": "local_cpu",
+  "concurrency": 8,
+  "warmup_n": 5,
+  "requests": 200,
+  "errors": 0,
+  "e2e_p50_ms": 159.6740500000009,
+  "e2e_p95_ms": 218.88892999999976,
+  "e2e_p99_ms": 290.09236299999924,
+  "notes": "",
+  "outcomes_errors": [],
+  "run_id": "20260915T002828Z",
+  "phase": 5,
+  "base_url": "http://127.0.0.1:8000",
+  "note": "Not production traffic. Timed HTTP /recommend against a short-lived endpoint."
+}

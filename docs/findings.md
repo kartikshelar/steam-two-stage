@@ -173,10 +173,53 @@ Run `20260914T212349Z`. Source: `results/phase4_ope_20260914T212349Z.json`. **No
 
 ## Phase 5 — Serving
 
-Not started.
+**Not production traffic.** Both stages behind one FastAPI `POST /recommend`: frozen content two-tower retrieves 500 (exact inner product), PIT GBDT reranks. Same `PITState.features` as training. Terraform reused the `llm-serving-bench` pattern (budget first, public subnet, no NAT) with CPU `t3.medium` instead of GPU. No GitHub OIDC provider was created (the account already has one).
+
+### Skew
+
+`results/skew_check.json`, run `20260915T002631Z`. 200 random (user, item) pairs. Serving `feature_frame` vs `PITState.features` at the temporal cutoff: **0 mismatches**. `retrieval_score` was compared at 0 in this check; `recommend()` fills it from the frozen two-tower.
+
+### Latency
+
+Source: `results/serving_latency.csv`. 200 requests, concurrency 8, k=20, errors=0.
+
+| hardware | p50 ms | p95 ms | p99 ms | run |
+|---|---|---|---|---|
+| **aws_t3.medium (headline)** | 194.7 | 275.3 | 302.7 | `20260915T004053Z` |
+| local_cpu (comparison) | 159.7 | 218.9 | 290.1 | `20260915T002828Z` |
+
+AWS numbers are end-to-end through the public ALB. Local is the same app on the laptop and is labeled as such.
+
+### Infra
+
+Budget `steam-recsys-monthly` ($8 alarm / $10 ceiling) was applied before VPC or compute. ASG started at desired=0, scaled to 1 for the timed session, then `terraform destroy` removed **27 resources**. Post-destroy console check in us-west-2: no `steam-recsys` EC2, no ALB, no NAT. No NAT Gateway existed. Spend is not logged from Cost Explorer in this session; the live window was minutes of `t3.medium` + ALB.
+
+### What this cannot claim
+
+No production traffic, no real users, no autoscaling under real load, no SLA.
 
 ---
 
 ## Phase 6 — Write-up and Azure port
 
-Not started.
+README follows PROJECT_BRIEF §14. Azure Terraform in `terraform/azure` is a port of `terraform/aws`: resource-group budget first, public VNet only, no NAT Gateway, ACR + blob instead of ECR + S3, Standard Load Balancer instead of ALB, CPU B-series, `instance_count` 0/1. Same $8 / $10 ceiling.
+
+Live apply ran on subscription `Azure subscription 1` after the account existed. Budget `steam-recsys-monthly` ($8) went on `steam-recsys-rg` before VNet or compute. ACR `steamrecsys9086e4` and storage `recs9086e4` stayed in `eastus`. `Standard_B2s`, `Standard_B2ms`, and zonal `Standard_B2s_v2` in `eastus` returned `SkuNotAvailable`. `Standard_B2s` in `westus2` also returned `SkuNotAvailable`. Compute moved to `westus2` (`compute_location`) and `Standard_B2s_v2` created. Azure Linux VMs rejected the ed25519 key; an RSA key was required. NSG probe priority 90 was invalid (Azure requires 100–4096).
+
+Loadgen `20260916T085546Z` against the Standard LB (`POST /recommend`, retrieve 500, PIT GBDT, k=20, concurrency 8, 200 requests, errors=0). Hardware label `azure_Standard_B2s_v2`. Source: `results/serving_latency.csv`.
+
+| hardware | p50 ms | p95 ms | p99 ms | run |
+|---|---|---|---|---|
+| **aws_t3.medium (headline)** | 194.7 | 275.3 | 302.7 | `20260915T004053Z` |
+| azure_Standard_B2s_v2 (port) | 129.8 | 174.5 | 228.2 | `20260916T085546Z` |
+| local_cpu (comparison) | 159.7 | 218.9 | 290.1 | `20260915T002828Z` |
+
+Azure numbers are one timed session through a public Standard LB. They are not production traffic and they do not replace the AWS headline. No Cost Management extract was pulled. No NAT Gateway was created.
+
+`terraform destroy` removed **22 resources**, including the resource group. Post-destroy CLI check on the same subscription: 0 `steam-recsys` resource groups, 0 VMs, 0 load balancers, 0 NAT gateways, 0 public IPs, 0 ACR, 0 `recs*` storage accounts.
+
+### What this cannot claim
+
+No Azure production recsys. No second model. No GPU. No overnight serving.
+
+---

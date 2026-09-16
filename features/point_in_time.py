@@ -13,6 +13,10 @@ DAY = 86400
 WINDOWS = (7, 30, 90)
 NO_HISTORY_DAYS = 3650.0
 
+
+def _genre_bag() -> dict[str, int]:
+    return defaultdict(int)
+
 FEATURE_COLS = [
     "user_n",
     "user_hours_sum",
@@ -90,7 +94,7 @@ class PITState:
         self.user_last: dict[str, int] = {}
         self.user_ts: dict[str, list[int]] = defaultdict(list)
         self.item_ts: dict[str, list[int]] = defaultdict(list)
-        self.user_genres: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
+        self.user_genres: dict[str, dict[str, int]] = defaultdict(_genre_bag)
 
     def features(self, user: str, item: str, t: int, meta: dict | None) -> dict[str, float]:
         ut = self.user_ts.get(user, [])
@@ -281,3 +285,28 @@ def features_at_events(
 
 def iter_sorted_events(events: pd.DataFrame) -> Iterable:
     return events.sort_values(["ts", "user_id", "item_id"]).itertuples(index=False)
+
+
+def freeze_before(
+    events: pd.DataFrame,
+    games: pd.DataFrame | None,
+    cutoff_unix: int,
+) -> PITState:
+    """Observe every event with ts < cutoff. Used by ranking eval and serving."""
+    meta_by_item = _item_meta(games if games is not None else pd.DataFrame())
+    state = PITState()
+    past = events.loc[events["ts"] < cutoff_unix]
+    ordered = past.sort_values(["ts", "user_id", "item_id"])
+    try:
+        from tqdm import tqdm
+
+        iterator = tqdm(ordered.itertuples(index=False), total=len(ordered), desc="PIT freeze")
+    except ImportError:
+        iterator = ordered.itertuples(index=False)
+    for rec in iterator:
+        t = int(rec.ts)
+        item = str(rec.item_id)
+        hours = float(rec.hours) if rec.hours == rec.hours else float("nan")
+        meta_i = meta_by_item.get(item)
+        state.observe(str(rec.user_id), item, t, hours, (meta_i or {}).get("genres") or [])
+    return state

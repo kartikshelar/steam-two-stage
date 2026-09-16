@@ -1,0 +1,17 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.git/
+.cursor/
+data/raw/
+data/processed/
+data/splits/
+data/features/
+models/
+serving/bundle/
+terraform/
+results/
+docs/
+*.md
+.pytest_cache/

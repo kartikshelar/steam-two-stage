@@ -1,0 +1,22 @@
+{
+  "phase": 5,
+  "headline_hardware": "aws_t3.medium",
+  "headline_run_id": "20260915T004053Z",
+  "e2e_p50_ms": 194.7200499999999,
+  "e2e_p95_ms": 275.30449999999973,
+  "e2e_p99_ms": 302.6577109999998,
+  "requests": 200,
+  "concurrency": 8,
+  "errors": 0,
+  "skew_run_id": "20260915T002631Z",
+  "skew_n_checked": 200,
+  "skew_n_mismatch": 0,
+  "skew_passed": true,
+  "terraform_destroy": "27 resources destroyed",
+  "post_destroy_check": {
+    "ec2_tagged_running": 0,
+    "alb_named_steam_recsys": 0,
+    "nat_gateways": 0
+  },
+  "note": "Not production traffic. Spend not logged from Cost Explorer this session."
+}

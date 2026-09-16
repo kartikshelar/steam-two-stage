@@ -11,6 +11,14 @@ models/
 *.ckpt
 *.bin
 
+# Serving bundle / terraform secrets
+serving/bundle/
+terraform/**/terraform.tfvars
+terraform/**/.terraform/
+terraform/**/*.tfstate
+terraform/**/*.tfstate.backup
+terraform/**/*.tfplan
+
 # Python
 .venv/
 venv/
@@ -32,3 +40,8 @@ Thumbs.db
 !results/**/*.csv
 !results/**/*.json
 !results/**/*.md
+
+# Local working notes / editor agent config (not the public write-up)
+.cursor/
+PROJECT_BRIEF.md
+steam-recsys-BRIEF.md

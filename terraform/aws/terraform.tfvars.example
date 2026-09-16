@@ -1,0 +1,14 @@
+# Copy to terraform.tfvars (NEVER commit terraform.tfvars — it may contain your email/IP).
+# First apply: leave enables false. Only budget + SNS.
+
+aws_region  = "us-west-2"
+alert_email = "YOUR_EMAIL@example.com"
+
+# Keep these false until docs/aws-budget-guardrails.md checklist is done.
+enable_network = false
+enable_compute = false
+
+# When you eventually enable compute for a short session:
+# instance_type    = "t3.medium"
+# asg_max_size     = 1
+# allowed_cidr_api = "x.x.x.x/32"  # your public IP

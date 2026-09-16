@@ -1,0 +1,37 @@
+#!/bin/bash
+set -euo pipefail
+exec > >(tee /var/log/steam-recsys-boot.log) 2>&1
+echo "boot $(date -Is)"
+
+dnf install -y docker
+systemctl enable --now docker
+
+REGION="${aws_region}"
+ECR_REGISTRY="${ecr_registry}"
+ECR_REPO="${ecr_repository}"
+IMAGE_PARAM="${image_param}"
+S3_BUCKET="${s3_bucket}"
+
+mkdir -p /opt/steam-recsys/bundle
+aws s3 sync "s3://$${S3_BUCKET}/bundle" /opt/steam-recsys/bundle --region "$REGION"
+
+IMAGE="$(aws ssm get-parameter --name "$IMAGE_PARAM" --region "$REGION" --query Parameter.Value --output text 2>/dev/null || true)"
+if [[ -z "$IMAGE" || "$IMAGE" == "placeholder:not-pushed-yet" ]]; then
+  IMAGE="$${ECR_REPO}:latest"
+fi
+
+echo "deploy_image=$IMAGE"
+aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$ECR_REGISTRY"
+
+docker rm -f steam-recs 2>/dev/null || true
+if docker pull "$IMAGE"; then
+  docker run -d --name steam-recs --restart unless-stopped \
+    -p 8000:8000 \
+    -v /opt/steam-recsys/bundle:/app/serving/bundle \
+    "$IMAGE"
+  echo "container_started $(date -Is)"
+else
+  echo "ecr_pull_failed — node booted without serving container" >&2
+fi
+
+echo "boot_ready $(date -Is)"

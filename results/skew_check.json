@@ -1,0 +1,28 @@
+{
+  "n_checked": 200,
+  "n_mismatch": 0,
+  "passed": true,
+  "feature_cols": [
+    "user_n",
+    "user_hours_sum",
+    "user_days_since_last",
+    "user_n_7d",
+    "user_n_30d",
+    "user_n_90d",
+    "item_n",
+    "item_n_7d",
+    "item_n_30d",
+    "item_n_90d",
+    "ui_n",
+    "genre_affinity",
+    "item_price",
+    "item_log_price",
+    "item_days_since_release",
+    "item_is_free",
+    "retrieval_score"
+  ],
+  "examples": [],
+  "note": "Serving wraps PITState.features at the temporal cutoff \u2014 the same function the ranker was trained on. retrieval_score is compared at 0 here; recommend() fills it from the frozen two-tower.",
+  "run_id": "20260915T002631Z",
+  "phase": 5
+}

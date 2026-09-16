@@ -1,0 +1,40 @@
+#!/bin/bash
+set -euo pipefail
+exec > >(tee /var/log/steam-recsys-boot.log) 2>&1
+echo "boot $(date -Is)"
+
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y docker.io curl jq
+systemctl enable --now docker
+curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
+ACR_NAME="${acr_name}"
+ACR_LOGIN="${acr_login}"
+STORAGE_ACCOUNT="${storage_account}"
+CONTAINER="${container}"
+
+az login --identity
+mkdir -p /opt/steam-recsys/bundle
+az storage blob download-batch \
+  --account-name "$STORAGE_ACCOUNT" \
+  --source "$CONTAINER" \
+  --destination /opt/steam-recsys/bundle \
+  --auth-mode login
+
+az acr login --name "$ACR_NAME"
+IMAGE="$${ACR_LOGIN}/steam-recsys-serving:latest"
+echo "deploy_image=$IMAGE"
+
+docker rm -f steam-recs 2>/dev/null || true
+if docker pull "$IMAGE"; then
+  docker run -d --name steam-recs --restart unless-stopped \
+    -p 8000:8000 \
+    -v /opt/steam-recsys/bundle:/app/serving/bundle \
+    "$IMAGE"
+  echo "container_started $(date -Is)"
+else
+  echo "acr_pull_failed — node booted without serving container" >&2
+fi
+
+echo "boot_ready $(date -Is)"

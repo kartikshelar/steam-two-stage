@@ -1,0 +1,16 @@
+{
+  "hardware": "aws_t3.medium",
+  "concurrency": 8,
+  "warmup_n": 5,
+  "requests": 200,
+  "errors": 0,
+  "e2e_p50_ms": 194.7200499999999,
+  "e2e_p95_ms": 275.30449999999973,
+  "e2e_p99_ms": 302.6577109999998,
+  "notes": "",
+  "outcomes_errors": [],
+  "run_id": "20260915T004053Z",
+  "phase": 5,
+  "base_url": "http://steam-recsys-alb-178634557.us-west-2.elb.amazonaws.com",
+  "note": "Not production traffic. Timed HTTP /recommend against a short-lived endpoint."
+}

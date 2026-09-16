@@ -1,8 +1,8 @@
-# Steam recsys
+# Two-stage Steam recommender
 
 Two-stage game recommender on Steam reviews: retrieval, then ranking, with point-in-time features and offline experiment estimators. Offline machinery only — no production traffic, no real users, no live A/B test.
 
-**Phase: 4 done. Retrieval architecture is frozen. No online experiment was run.**
+**Phase: 6 done. Azure port applied, loadgen logged, stack destroyed. Retrieval architecture is frozen. No online experiment was run. No production traffic was served.**
 
 ---
 
@@ -54,7 +54,7 @@ Most-popular is stronger at K=10. That is the headline retrieval number, not a f
   └─────────────────────┘
              │
              ▼
-      served endpoint (Phase 5 — not started)
+      POST /recommend (retrieve 500, then PIT GBDT)
 ```
 
 Frozen at end of Phase 1 (`results/phase1_architecture.json`): user ID tower; item tower is ID (unk for never-trained items) + mean genre + mean tag + price/year, in-batch negatives, logQ correction, ID dropout 0.2. Training label for the frozen model is **purchase**. Changing this architecture invalidates later comparisons.
@@ -144,7 +144,15 @@ Leaked top feature: `ui_n` (includes the current review and any later ones). PIT
 
 ## Serving latency
 
-Phase 5. Not started. No p50/p95/p99 exists. No production traffic was served.
+**Not production traffic.** Timed `POST /recommend` (retrieve 500, PIT GBDT rerank, return k=20) against a short-lived FastAPI endpoint. Headline hardware is AWS. Source: `results/serving_latency.csv`.
+
+| hardware | concurrency | requests | errors | p50 ms | p95 ms | p99 ms | run |
+|---|---|---|---|---|---|---|---|
+| **aws_t3.medium (headline)** | 8 | 200 | 0 | **194.7** | **275.3** | **302.7** | `20260915T004053Z` |
+| azure_Standard_B2s_v2 (port) | 8 | 200 | 0 | 129.8 | 174.5 | 228.2 | `20260916T085546Z` |
+| local_cpu (comparison) | 8 | 200 | 0 | 159.7 | 218.9 | 290.1 | `20260915T002828Z` |
+
+Training-serving skew: 200 sampled pairs, 0 mismatches (`results/skew_check.json`, `20260915T002631Z`). Serving calls the same `PITState.features` function the ranker was trained on. AWS stack was destroyed after that run (`terraform destroy` in `terraform/aws`). Azure is a port of the same flags (budget first, public subnet, no NAT, one CPU VM). `Standard_B2s` had no capacity in `eastus` or `westus2`; the logged Azure row is `Standard_B2s_v2` in `westus2` through a Standard Load Balancer (`20260916T085546Z`). Azure stack is destroyed after that run (`terraform destroy` in `terraform/azure`). Neither session has a Cost Explorer / Cost Management extract; both were minutes of one CPU VM plus a load balancer, under the $10 ceiling. Not production traffic.
 
 ---
 
@@ -208,6 +216,21 @@ The Phase 0 pre-registration was not falsified: thresholded two-tower recs are l
 
 ---
 
+## What this still cannot claim
+
+Be honest in interviews. Overclaiming here is worse than the gap.
+
+- No production recsys experience
+- No live feedback loop, so no experience with degenerate loops or position bias in a deployed system
+- No real A/B test
+- No real-time feature serving
+- No exposure to the organizational side (metric selection, guardrail metrics, launch decisions)
+- No Azure production serving — one timed loadgen on a short-lived `Standard_B2s_v2`, then destroy
+
+The honest framing: built the offline machinery and can reason about the problems. Has not operated a recommender in production.
+
+---
+
 ## What was not built (and will not be)
 
 - No online experiment, no real users, no live feedback loop, no production recsys experience
@@ -216,7 +239,7 @@ The Phase 0 pre-registration was not falsified: thresholded two-tower recs are l
 - No UI
 - No real-time streaming features
 - No general-purpose feature store
-- No Azure port until Phase 6 (AWS first)
+- No second recsys stack on Azure. The Azure session reused the same serving image and PIT bundle as AWS.
 
 ---
 
@@ -260,6 +283,35 @@ python experiments/phase1_retrieval.py --split both
 python experiments/leak_gap.py
 python experiments/phase3_ranking.py
 python experiments/phase4_ope.py
+python serving/export_bundle.py
+python serving/skew_check.py
+python -m uvicorn serving.app:app --host 127.0.0.1 --port 8000
+# other terminal:
+python serving/loadgen.py --base-url http://127.0.0.1:8000 --hardware local_cpu
+```
+
+AWS (budget first; see `docs/aws-budget-guardrails.md`):
+
+```powershell
+cd terraform\aws
+copy terraform.tfvars.example terraform.tfvars
+# set alert_email; leave enable_network/enable_compute false
+terraform init
+terraform apply
+# confirm SNS email, then enable_network, apply, publish image, enable_compute, loadgen, terraform destroy
+```
+
+Azure (port of the AWS stack; budget first; RSA SSH key; see `docs/azure-port.md`):
+
+```powershell
+az login
+az account show   # must succeed
+cd terraform\azure
+copy terraform.tfvars.example terraform.tfvars
+# set alert_email; leave enable_network/enable_compute false, instance_count 0
+terraform init
+terraform apply
+# confirm budget email, then enable_network, publish to ACR, enable_compute, instance_count=1, loadgen, terraform destroy
 ```
 
 Or: `python run_phase0.py` then `python run_phase1.py` then `python run_phase2.py` then `python run_phase3.py` then `python run_phase4.py`.
@@ -283,5 +335,5 @@ Splits are frozen in `data/splits/manifest.json`. Rebuilding requires `--force`.
 | 2 Point-in-time features | **done** (run `20260914T082225Z`) |
 | 3 Ranking | **done** (run `20260914T084052Z`) |
 | 4 Experimentation layer | **done** (run `20260914T212349Z`) |
-| 5 Serving | not started |
-| 6 Write-up and Azure port | not started |
+| 5 Serving | **done** (AWS run `20260915T004053Z`; stack destroyed) |
+| 6 Write-up and Azure port | **done** (Azure run `20260916T085546Z`; stack destroyed) |
